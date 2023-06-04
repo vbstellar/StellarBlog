@@ -3,6 +3,7 @@ import bodyParser from "body-parser";
 import ejs from "ejs";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
+import _ from "lodash";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -47,6 +48,15 @@ app.get("/about", (req, res) => {
 
 app.get("/compose", (req, res) => {
   res.render("compose");
+});
+
+app.get("/posts/:blog", (req, res) => {
+  const blogRoute = _.lowerCase(req.params.blog);
+  posts.forEach((post) => {
+    if (_.lowerCase(post.title) === blogRoute) {
+      res.render("post", { title: post.title, body: post.body });
+    }
+  });
 });
 
 app.listen(3000, function () {
